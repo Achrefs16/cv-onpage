@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // configure DockerHub credentials in Jenkins
-         // configure Slack webhook credentials
-        IMAGE_NAME = "achrefs161/cv-onpage"
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // Your Docker Hub credential ID
+        IMAGE_NAME = "achrefs16/cv-onpage"
     }
 
     stages {
@@ -25,7 +24,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-id') {
+                    docker.withRegistry('', "${DOCKERHUB_CREDENTIALS}") {
                         docker.image("${IMAGE_NAME}:latest").push()
                     }
                 }
@@ -33,4 +32,12 @@ pipeline {
         }
     }
 
+    post {
+        success {
+            echo "✅ Pipeline succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+        }
+        failure {
+            echo "❌ Pipeline failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+        }
+    }
 }
