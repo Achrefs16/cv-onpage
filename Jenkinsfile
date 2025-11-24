@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // configure DockerHub credentials in Jenkins
-        SLACK_WEBHOOK_URL = credentials('slack-webhook')    // configure Slack webhook credentials
+         // configure Slack webhook credentials
         IMAGE_NAME = "achrefs161/cv-onpage"
     }
 
@@ -33,12 +33,4 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            slackSend(channel: '#general', color: 'good', message: "✅ Pipeline succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}", teamDomain: 'YOUR_TEAM', tokenCredentialId: 'slack-webhook')
-        }
-        failure {
-            slackSend(channel: '#general', color: 'danger', message: "❌ Pipeline failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}", teamDomain: 'YOUR_TEAM', tokenCredentialId: 'slack-webhook')
-        }
-    }
 }
