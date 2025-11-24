@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-id') // configure DockerHub credentials in Jenkins
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // configure DockerHub credentials in Jenkins
         SLACK_WEBHOOK_URL = credentials('slack-webhook')    // configure Slack webhook credentials
         IMAGE_NAME = "achrefs161/cv-onpage"
     }
