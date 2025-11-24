@@ -28,17 +28,19 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
-            steps {
-                echo '📤 Push vers Docker Hub...'
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDENTIALS) {
-                        docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push()
-                        docker.image("${IMAGE_NAME}:latest").push()
-                    }
-                }
-            }
-        }
+      stage('Push to Docker Hub') {
+          steps {
+              echo '📤 Push vers Docker Hub...'
+              timeout(time: 30, unit: 'MINUTES') {
+                  script {
+                      docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDENTIALS) {
+                          docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push()
+                          docker.image("${IMAGE_NAME}:latest").push()
+                      }
+                  }
+              }
+          }
+      }
 
         stage('Clean Up') {
             steps {
